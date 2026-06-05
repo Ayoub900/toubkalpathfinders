@@ -1,0 +1,91 @@
+// Prisma schema — Toubkal Pathfinders
+// MongoDB datasource backed by the MONGODB_URL connection string.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
+}
+
+model Trek {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  cat         String // summit | multi | running | signature
+  name        String
+  blurb       String
+  description String?
+  price       String
+  priceValue  Int?
+  priceNote   String
+  duration    String?
+  difficulty  String?
+  image       String?
+  gallery     String[] @default([])
+  highlights  String[] @default([])
+  included    String[] @default([])
+  itinerary   Json?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+model Booking {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  trekId    String   @db.ObjectId
+  trek      Trek     @relation(fields: [trekId], references: [id], onDelete: Cascade)
+  trekName  String
+  name      String
+  email     String
+  phone     String?
+  date      String?
+  people    Int      @default(1)
+  message   String?
+  status    String   @default("pending") // pending | confirmed | cancelled
+  createdAt DateTime @default(now())
+}
+
+model Inquiry {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    String   @default("new") // new | replied | archived
+  createdAt DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+model Post {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug            String    @unique
+  title           String
+  excerpt         String
+  content         String // sanitised rich-text HTML from the editor
+  category        String // guides | stories | conservation | training | news
+  tags            String[]  @default([])
+  coverImage      String?
+  coverAlt        String?
+  author          String    @default("Toubkal Pathfinders")
+  readingMinutes  Int       @default(1)
+  // SEO overrides — fall back to title/excerpt when blank
+  metaTitle       String?
+  metaDescription String?
+  featured        Boolean   @default(false)
+  published       Boolean   @default(true)
+  order           Int       @default(0)
+  publishedAt     DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([published, publishedAt])
+  @@index([category])
+}
