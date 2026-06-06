@@ -22,7 +22,14 @@ export async function POST(req: Request) {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
-    secure: process.env.NODE_ENV === "production",
+    // Secure cookies are dropped by the browser when the site is served over
+    // plain HTTP. Default to on in production, but allow COOKIE_SECURE=false to
+    // turn it off when the deployment has no TLS yet. Set it back to "true"
+    // (or remove the override) once HTTPS is in place.
+    secure:
+      process.env.COOKIE_SECURE != null
+        ? process.env.COOKIE_SECURE === "true"
+        : process.env.NODE_ENV === "production",
     maxAge: SESSION_TTL_SECONDS,
   });
   return res;
