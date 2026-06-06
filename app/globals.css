@@ -1057,6 +1057,15 @@ html.js .hero .reveal.d4{animation-delay:.48s}
 .pd-cta h3{font-family:var(--display);font-weight:800;font-size:20px;margin-bottom:8px}
 .pd-cta p{color:#CFCBB8;font-size:14.5px;line-height:1.55;margin-bottom:18px}
 .pd-cta .btn{width:100%}
+.pd-side-block .kicker{display:block;margin-bottom:4px}
+.pd-links{display:flex;flex-direction:column}
+.pd-link{display:block;padding:13px 0;border-top:1px solid var(--line);transition:padding .18s}
+.pd-links li:last-child .pd-link{border-bottom:1px solid var(--line)}
+.pd-link:hover{padding-left:6px}
+.pd-link-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--lime-3)}
+.pd-link-title{display:block;font-weight:700;font-size:14.5px;line-height:1.35;margin-top:4px;color:var(--ink);transition:color .18s}
+.pd-link:hover .pd-link-title{color:var(--lime-3)}
+.pd-link-meta{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:5px}
 .pd-related{border-top:1px solid var(--line);margin-top:clamp(40px,6vw,72px);padding-top:clamp(40px,6vw,72px)}
 
 /* ============================================================
@@ -1107,7 +1116,7 @@ html.js .hero .reveal.d4{animation-delay:.48s}
   .post-grid{grid-template-columns:1fr 1fr}
   .pd-body-grid{grid-template-columns:1fr;gap:40px}
   .pd-sticky{position:static;flex-direction:row;flex-wrap:wrap}
-  .pd-tags,.pd-cta{flex:1;min-width:240px}
+  .pd-tags,.pd-cta,.pd-side-block{flex:1;min-width:240px}
 }
 @media(max-width:680px){
   .post-grid{grid-template-columns:1fr}

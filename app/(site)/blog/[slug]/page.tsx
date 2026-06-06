@@ -10,6 +10,7 @@ import {
   getRelatedPosts,
   postTone,
 } from "@/lib/posts";
+import { CATEGORY_LABEL, getTreks } from "@/lib/treks";
 import { SITE } from "@/lib/site-data";
 import BlogJsonLd from "@/components/blog/BlogJsonLd";
 import PostCard from "@/components/blog/PostCard";
@@ -64,6 +65,12 @@ export default async function PostDetailPage({ params }: Props) {
   if (!post || !post.published) notFound();
 
   const related = await getRelatedPosts(post);
+
+  // Sidebar cross-links: a few recent reads (any category) + featured treks.
+  const [allPosts, allTreks] = await Promise.all([getPosts(), getTreks()]);
+  const morePosts = allPosts.filter((p) => p.id !== post.id).slice(0, 4);
+  const sideTreks = allTreks.slice(0, 3);
+
   const tone = post.coverImage ? "" : postTone(post);
   const heroPhClass = `ph${tone ? ` ${tone}` : ""}`;
 
@@ -150,6 +157,45 @@ export default async function PostDetailPage({ params }: Props) {
                     Browse treks <span className="arrow">→</span>
                   </Link>
                 </div>
+
+                {morePosts.length > 0 && (
+                  <div className="pd-side-block">
+                    <span className="kicker">MORE READS</span>
+                    <ul className="pd-links">
+                      {morePosts.map((p) => (
+                        <li key={p.id}>
+                          <Link href={`/blog/${p.slug}`} className="pd-link">
+                            <span className="pd-link-tag">
+                              {POST_CATEGORY_LABEL[p.category] || p.category}
+                            </span>
+                            <span className="pd-link-title">{p.title}</span>
+                            <span className="pd-link-meta">{p.readingMinutes} min read</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {sideTreks.length > 0 && (
+                  <div className="pd-side-block">
+                    <span className="kicker">GUIDED TREKS</span>
+                    <ul className="pd-links">
+                      {sideTreks.map((t) => (
+                        <li key={t.id}>
+                          <Link href={`/treks/${t.slug}`} className="pd-link">
+                            <span className="pd-link-tag">{CATEGORY_LABEL[t.cat] || t.cat}</span>
+                            <span className="pd-link-title">{t.name}</span>
+                            <span className="pd-link-meta">
+                              {t.duration ? `${t.duration} · ` : ""}
+                              {t.price}
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </aside>
           </div>
