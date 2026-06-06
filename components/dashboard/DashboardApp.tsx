@@ -6,6 +6,31 @@ import { CATEGORY_LABEL, type Trek } from "@/lib/treks";
 import { POST_CATEGORY_LABEL, formatPostDate, type Post } from "@/lib/posts";
 import TrekForm from "@/components/dashboard/TrekForm";
 import PostForm from "@/components/dashboard/PostForm";
+import {
+  LayoutGrid,
+  Mountain,
+  Ticket,
+  PenLine,
+  Mail,
+  Settings,
+  LogOut,
+  Search,
+  Bell,
+  Clock,
+  CheckCircle,
+  Euro,
+  Star,
+  FileText,
+  Archive,
+  User,
+  Users,
+  Plus,
+  ArrowRight,
+  ArrowLeft,
+  ArrowDown,
+  X,
+  Dot,
+} from "@/components/dashboard/icons";
 
 export type BookingRow = {
   id: string;
@@ -31,7 +56,7 @@ export type InquiryRow = {
   createdAt: string;
 };
 
-type View = "overview" | "treks" | "bookings" | "messages" | "blog";
+type View = "overview" | "treks" | "bookings" | "messages" | "blog" | "settings";
 
 const VIEW_TITLE: Record<View, string> = {
   overview: "Dashboard",
@@ -39,6 +64,7 @@ const VIEW_TITLE: Record<View, string> = {
   bookings: "Bookings",
   messages: "Messages",
   blog: "Journal",
+  settings: "Settings",
 };
 
 /* ---------------- helpers ---------------- */
@@ -110,11 +136,13 @@ export default function DashboardApp({
   initialBookings,
   initialPosts,
   initialInquiries,
+  adminEmail,
 }: {
   initialTreks: Trek[];
   initialBookings: BookingRow[];
   initialPosts: Post[];
   initialInquiries: InquiryRow[];
+  adminEmail: string | null;
 }) {
   const router = useRouter();
   const [view, setView] = useState<View>("overview");
@@ -275,8 +303,9 @@ export default function DashboardApp({
       {/* ===================== SIDEBAR ===================== */}
       <aside className="sb">
         <div className="sb-brand">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/mark.png" alt="" />
+          <span className="sb-mark">
+            <Mountain size={22} />
+          </span>
           <div>
             <div className="bt">Pathfinders</div>
             <div className="bs">Operations Console</div>
@@ -288,7 +317,7 @@ export default function DashboardApp({
             className={`sb-link${view === "overview" ? " active" : ""}`}
             onClick={() => go("overview")}
           >
-            <span className="ic">▦</span>
+            <span className="ic"><LayoutGrid size={17} /></span>
             <span className="lbl">Dashboard</span>
           </button>
           <div className="sb-group">Manage</div>
@@ -296,7 +325,7 @@ export default function DashboardApp({
             className={`sb-link${view === "treks" ? " active" : ""}`}
             onClick={() => go("treks")}
           >
-            <span className="ic">▲</span>
+            <span className="ic"><Mountain size={17} /></span>
             <span className="lbl">Treks</span>
             <span className="soon">{treks.length}</span>
           </button>
@@ -304,7 +333,7 @@ export default function DashboardApp({
             className={`sb-link${view === "bookings" ? " active" : ""}`}
             onClick={() => go("bookings")}
           >
-            <span className="ic">◆</span>
+            <span className="ic"><Ticket size={17} /></span>
             <span className="lbl">Bookings</span>
             {pendingCount > 0 && <span className="badge">{pendingCount}</span>}
           </button>
@@ -312,7 +341,7 @@ export default function DashboardApp({
             className={`sb-link${view === "blog" ? " active" : ""}`}
             onClick={() => go("blog")}
           >
-            <span className="ic">✎</span>
+            <span className="ic"><PenLine size={17} /></span>
             <span className="lbl">Journal</span>
             <span className="soon">{posts.length}</span>
           </button>
@@ -320,7 +349,7 @@ export default function DashboardApp({
             className={`sb-link${view === "messages" ? " active" : ""}`}
             onClick={() => go("messages")}
           >
-            <span className="ic">✉</span>
+            <span className="ic"><Mail size={17} /></span>
             <span className="lbl">Messages</span>
             {newInquiryCount > 0 ? (
               <span className="badge">{newInquiryCount}</span>
@@ -328,12 +357,14 @@ export default function DashboardApp({
               <span className="soon">{inquiries.length}</span>
             )}
           </button>
-          <div className="sb-group">Insights</div>
-          <span className="sb-link stub" title="Coming soon">
-            <span className="ic">◇</span>
-            <span className="lbl">Reports</span>
-            <span className="soon">Soon</span>
-          </span>
+          <div className="sb-group">Account</div>
+          <button
+            className={`sb-link${view === "settings" ? " active" : ""}`}
+            onClick={() => go("settings")}
+          >
+            <span className="ic"><Settings size={17} /></span>
+            <span className="lbl">Settings</span>
+          </button>
         </nav>
         <div className="sb-foot">
           <button className="sb-user" onClick={logout} title="Log out">
@@ -342,7 +373,7 @@ export default function DashboardApp({
               <div className="nm">Pathfinders Admin</div>
               <div className="rl">OPERATIONS LEAD</div>
             </div>
-            <span className="cog">⎋</span>
+            <span className="cog"><LogOut size={16} /></span>
           </button>
         </div>
       </aside>
@@ -358,12 +389,15 @@ export default function DashboardApp({
           </div>
           <div className="tb-spacer" />
           <label className="search">
-            <span style={{ color: "var(--muted-d)" }}>⌕</span>
+            <span style={{ color: "var(--muted-d)", display: "grid" }}>
+              <Search size={16} />
+            </span>
             <input placeholder="Search bookings, customers, treks…" />
             <span className="k">⌘K</span>
           </label>
           <button className="tb-icon" aria-label="Notifications" onClick={() => go("bookings")}>
-            ◔{pendingCount > 0 && <span className="dot" />}
+            <Bell size={18} />
+            {pendingCount > 0 && <span className="dot" />}
           </button>
         </header>
 
@@ -417,6 +451,8 @@ export default function DashboardApp({
               seeding={seedingPosts}
             />
           )}
+
+          {view === "settings" && <SettingsView initialEmail={adminEmail} />}
         </main>
       </div>
     </div>
@@ -488,10 +524,10 @@ function Overview({
         </div>
         <div className="page-actions">
           <button className="btn btn-ghost" onClick={onGoBookings}>
-            ↓ Bookings
+            <ArrowDown size={16} /> Bookings
           </button>
           <button className="btn btn-lime" onClick={onGoTreks}>
-            + New trek
+            <Plus size={16} /> New trek
           </button>
         </div>
       </div>
@@ -501,7 +537,7 @@ function Overview({
         <div className="kpi">
           <div className="top">
             <span className="lab">Bookings · total</span>
-            <span className="ic">◆</span>
+            <span className="ic"><Ticket size={18} /></span>
           </div>
           <div className="val">{stats.total}</div>
           <div className="delta up">
@@ -511,7 +547,7 @@ function Overview({
         <div className="kpi">
           <div className="top">
             <span className="lab">Revenue · confirmed</span>
-            <span className="ic">€</span>
+            <span className="ic"><Euro size={18} /></span>
           </div>
           <div className="val">{fmtMoney(stats.revenue)}</div>
           <div className="delta up">
@@ -521,7 +557,7 @@ function Overview({
         <div className="kpi">
           <div className="top">
             <span className="lab">Treks live</span>
-            <span className="ic">▲</span>
+            <span className="ic"><Mountain size={18} /></span>
           </div>
           <div className="val">
             {stats.published}
@@ -534,7 +570,7 @@ function Overview({
         <div className={`kpi${pendingCount > 0 ? " o" : ""}`}>
           <div className="top">
             <span className="lab">Pending</span>
-            <span className="ic">⌚</span>
+            <span className="ic"><Clock size={18} /></span>
           </div>
           <div className="val">{pendingCount}</div>
           <div className={`delta ${pendingCount > 0 ? "down" : "up"}`}>
@@ -551,7 +587,7 @@ function Overview({
             <div className="card-head">
               <h3>Upcoming departures</h3>
               <button className="lnk" onClick={onGoBookings}>
-                All bookings →
+                All bookings <ArrowRight size={13} />
               </button>
             </div>
             {upcoming.length === 0 ? (
@@ -570,9 +606,9 @@ function Overview({
                       <div className="li-body">
                         <div className="t">{b.trekName}</div>
                         <div className="meta">
-                          <span>◎ {b.name}</span>
+                          <span><User size={13} /> {b.name}</span>
                           <span>
-                            ◆ {b.people} pax
+                            <Users size={13} /> {b.people} pax
                           </span>
                         </div>
                       </div>
@@ -591,7 +627,7 @@ function Overview({
             <div className="card-head">
               <h3>Recent bookings</h3>
               <button className="lnk" onClick={onGoBookings}>
-                All bookings →
+                All bookings <ArrowRight size={13} />
               </button>
             </div>
             {recent.length === 0 ? (
@@ -646,7 +682,7 @@ function Overview({
             <div className="card-head">
               <h3>Latest enquiries</h3>
               <button className="lnk" onClick={onGoBookings}>
-                Open bookings →
+                Open bookings <ArrowRight size={13} />
               </button>
             </div>
             {enquiries.length === 0 ? (
@@ -682,7 +718,7 @@ function Overview({
             <div className="card-head">
               <h3>Active treks</h3>
               <button className="lnk" onClick={onGoTreks}>
-                Manage →
+                Manage <ArrowRight size={13} />
               </button>
             </div>
             {treks.length === 0 ? (
@@ -750,7 +786,7 @@ function TreksView({
           </div>
           <div className="page-actions">
             <button className="btn btn-ghost" onClick={() => setEditing(null)}>
-              ← Back to list
+              <ArrowLeft size={16} /> Back to list
             </button>
           </div>
         </div>
@@ -781,7 +817,7 @@ function TreksView({
             </button>
           )}
           <button className="btn btn-lime" onClick={() => setEditing("new")}>
-            + New trek
+            <Plus size={16} /> New trek
           </button>
         </div>
       </div>
@@ -790,28 +826,28 @@ function TreksView({
         <div className="kpi">
           <div className="top">
             <span className="lab">Total treks</span>
-            <span className="ic">▲</span>
+            <span className="ic"><Mountain size={18} /></span>
           </div>
           <div className="val">{treks.length}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Published</span>
-            <span className="ic">◎</span>
+            <span className="ic"><CheckCircle size={18} /></span>
           </div>
           <div className="val">{published}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Drafts</span>
-            <span className="ic">◇</span>
+            <span className="ic"><FileText size={18} /></span>
           </div>
           <div className="val">{treks.length - published}</div>
         </div>
         <div className="kpi o">
           <div className="top">
             <span className="lab">Featured</span>
-            <span className="ic">★</span>
+            <span className="ic"><Star size={18} /></span>
           </div>
           <div className="val">{featured}</div>
         </div>
@@ -847,7 +883,7 @@ function TreksView({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={t.image} alt="" className="thumb" />
                     ) : (
-                      <div className="thumb empty">▲</div>
+                      <div className="thumb empty"><Mountain size={18} /></div>
                     )}
                   </td>
                   <td>
@@ -922,28 +958,28 @@ function BookingsView({
         <div className="kpi">
           <div className="top">
             <span className="lab">Total</span>
-            <span className="ic">◆</span>
+            <span className="ic"><Ticket size={18} /></span>
           </div>
           <div className="val">{bookings.length}</div>
         </div>
         <div className={`kpi${pending > 0 ? " o" : ""}`}>
           <div className="top">
             <span className="lab">Pending</span>
-            <span className="ic">⌚</span>
+            <span className="ic"><Clock size={18} /></span>
           </div>
           <div className="val">{pending}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Confirmed</span>
-            <span className="ic">◎</span>
+            <span className="ic"><CheckCircle size={18} /></span>
           </div>
           <div className="val">{confirmed}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Cancelled</span>
-            <span className="ic">✕</span>
+            <span className="ic"><X size={18} /></span>
           </div>
           <div className="val">{cancelled}</div>
         </div>
@@ -1064,28 +1100,28 @@ function MessagesView({
         <div className="kpi">
           <div className="top">
             <span className="lab">Total</span>
-            <span className="ic">✉</span>
+            <span className="ic"><Mail size={18} /></span>
           </div>
           <div className="val">{inquiries.length}</div>
         </div>
         <div className={`kpi${fresh > 0 ? " o" : ""}`}>
           <div className="top">
             <span className="lab">New</span>
-            <span className="ic">●</span>
+            <span className="ic"><Dot size={18} /></span>
           </div>
           <div className="val">{fresh}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Replied</span>
-            <span className="ic">◎</span>
+            <span className="ic"><CheckCircle size={18} /></span>
           </div>
           <div className="val">{replied}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Archived</span>
-            <span className="ic">✕</span>
+            <span className="ic"><Archive size={18} /></span>
           </div>
           <div className="val">{archived}</div>
         </div>
@@ -1176,6 +1212,153 @@ function MessagesView({
   );
 }
 
+/* ---------------- settings view ---------------- */
+
+function SettingsView({ initialEmail }: { initialEmail: string | null }) {
+  const [email, setEmail] = useState(initialEmail ?? "");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (!currentPassword) {
+      setError("Enter your current password to save changes.");
+      return;
+    }
+    if (newPassword && newPassword !== confirmPassword) {
+      setError("New password and confirmation do not match.");
+      return;
+    }
+    if (newPassword && newPassword.length < 8) {
+      setError("New password must be at least 8 characters.");
+      return;
+    }
+
+    const payload: { currentPassword: string; email?: string; newPassword?: string } = {
+      currentPassword,
+    };
+    if (email.trim() && email.trim().toLowerCase() !== (initialEmail ?? "").toLowerCase()) {
+      payload.email = email.trim();
+    }
+    if (newPassword) payload.newPassword = newPassword;
+
+    if (!payload.email && !payload.newPassword) {
+      setError("Change the email or enter a new password before saving.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/credentials", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(json?.error || "Could not save changes.");
+        return;
+      }
+      setSuccess("Login details updated.");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      if (json?.email) setEmail(json.email);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <>
+      <div className="page-head">
+        <div className="ph-l">
+          <div className="k">Account</div>
+          <h2>Settings</h2>
+          <div className="sub">Change the email and password used to sign in to this dashboard.</div>
+        </div>
+      </div>
+
+      <section className="card" style={{ maxWidth: 560 }}>
+        <div className="card-head">
+          <h3>Login credentials</h3>
+        </div>
+        <form className="booking-form" onSubmit={onSubmit} style={{ padding: 22, gap: 18 }}>
+          <div className="field">
+            <label htmlFor="set-email">Email</label>
+            <input
+              id="set-email"
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="set-new">New password</label>
+            <input
+              id="set-new"
+              type="password"
+              autoComplete="new-password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Leave blank to keep current password"
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="set-confirm">Confirm new password</label>
+            <input
+              id="set-confirm"
+              type="password"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="set-current">Current password</label>
+            <input
+              id="set-current"
+              type="password"
+              autoComplete="current-password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="Required to confirm changes"
+            />
+          </div>
+
+          {error && <p className="booking-error">{error}</p>}
+          {success && (
+            <p style={{ color: "var(--lime, #6cb33f)", fontSize: 14, margin: 0 }}>{success}</p>
+          )}
+
+          <button
+            type="submit"
+            className="btn btn-lime"
+            disabled={saving}
+            style={{ alignSelf: "flex-start", marginTop: 4 }}
+          >
+            {saving ? "Saving…" : "Save changes"}
+          </button>
+        </form>
+      </section>
+    </>
+  );
+}
+
 /* ---------------- blog view ---------------- */
 
 function BlogView({
@@ -1210,7 +1393,7 @@ function BlogView({
           </div>
           <div className="page-actions">
             <button className="btn btn-ghost" onClick={() => setEditing(null)}>
-              ← Back to list
+              <ArrowLeft size={16} /> Back to list
             </button>
           </div>
         </div>
@@ -1241,7 +1424,7 @@ function BlogView({
             </button>
           )}
           <button className="btn btn-lime" onClick={() => setEditing("new")}>
-            + New post
+            <Plus size={16} /> New post
           </button>
         </div>
       </div>
@@ -1250,28 +1433,28 @@ function BlogView({
         <div className="kpi">
           <div className="top">
             <span className="lab">Total posts</span>
-            <span className="ic">✎</span>
+            <span className="ic"><PenLine size={18} /></span>
           </div>
           <div className="val">{posts.length}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Published</span>
-            <span className="ic">◎</span>
+            <span className="ic"><CheckCircle size={18} /></span>
           </div>
           <div className="val">{published}</div>
         </div>
         <div className="kpi">
           <div className="top">
             <span className="lab">Drafts</span>
-            <span className="ic">◇</span>
+            <span className="ic"><FileText size={18} /></span>
           </div>
           <div className="val">{posts.length - published}</div>
         </div>
         <div className="kpi o">
           <div className="top">
             <span className="lab">Featured</span>
-            <span className="ic">★</span>
+            <span className="ic"><Star size={18} /></span>
           </div>
           <div className="val">{featured}</div>
         </div>
@@ -1307,7 +1490,7 @@ function BlogView({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={p.coverImage} alt="" className="thumb" />
                     ) : (
-                      <div className="thumb empty">✎</div>
+                      <div className="thumb empty"><PenLine size={18} /></div>
                     )}
                   </td>
                   <td>

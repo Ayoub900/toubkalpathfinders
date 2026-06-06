@@ -16,6 +16,7 @@ function LoginForm() {
   const params = useSearchParams();
   const from = params.get("from") || "/dashboard";
 
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ function LoginForm() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
@@ -48,15 +49,26 @@ function LoginForm() {
     <div className="login-screen">
       <div className="login-card">
         <h1>Pathfinders Admin</h1>
-        <p>Enter the dashboard password to manage treks and bookings.</p>
+        <p>Sign in with your email and password to manage treks and bookings.</p>
         <form className="booking-form" onSubmit={onSubmit}>
+          <div className="field">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="username"
+              value={email}
+              autoFocus
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
           <div className="field">
             <label htmlFor="pw">Password</label>
             <input
               id="pw"
               type="password"
+              autoComplete="current-password"
               value={password}
-              autoFocus
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>

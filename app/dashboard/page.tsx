@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { getTreks } from "@/lib/treks";
 import { getPosts } from "@/lib/posts";
+import { getAdminEmail } from "@/lib/credentials";
 import DashboardApp, {
   type BookingRow,
   type InquiryRow,
@@ -15,11 +16,12 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [treks, bookings, posts, inquiries] = await Promise.all([
+  const [treks, bookings, posts, inquiries, adminEmail] = await Promise.all([
     getTreks({ includeUnpublished: true }),
     prisma.booking.findMany({ orderBy: { createdAt: "desc" } }),
     getPosts({ includeUnpublished: true }),
     prisma.inquiry.findMany({ orderBy: { createdAt: "desc" } }),
+    getAdminEmail(),
   ]);
 
   const bookingRows: BookingRow[] = bookings.map((b) => ({
@@ -52,6 +54,7 @@ export default async function DashboardPage() {
       initialBookings={bookingRows}
       initialPosts={posts}
       initialInquiries={inquiryRows}
+      adminEmail={adminEmail}
     />
   );
 }

@@ -105,12 +105,3 @@ export async function verifySession(token: string | undefined | null): Promise<b
   }
   return true;
 }
-
-/** Timing-safe password check against DASHBOARD_PASSWORD. */
-export async function checkPassword(input: string): Promise<boolean> {
-  const pw = process.env.DASHBOARD_PASSWORD ?? "";
-  if (!pw) return false;
-  // Compare HMACs so the comparison time is independent of input length/content.
-  const [a, b] = await Promise.all([hmac(input), hmac(pw)]);
-  return timingSafeEqual(a, b);
-}

@@ -776,8 +776,8 @@ html.js .hero .reveal.d4{animation-delay:.48s}
   border-right:1px solid var(--sidebar-line);
   display:flex;flex-direction:column;padding:22px 16px 16px;
 }
-.adm .sb-brand{display:flex;align-items:center;gap:11px;padding:4px 8px 22px;margin-bottom:6px;border-bottom:1px solid var(--sidebar-line)}
-.adm .sb-brand img{height:auto;width:auto;max-height:24px;max-width:104px;flex:none}
+.adm .sb-brand{display:flex;align-items:center;gap:12px;padding:2px 6px 22px;margin-bottom:6px;border-bottom:1px solid var(--sidebar-line)}
+.adm .sb-brand .sb-mark{width:40px;height:40px;border-radius:12px;flex:none;display:grid;place-items:center;background:var(--lime);color:var(--ink);box-shadow:0 8px 18px -10px rgba(127,190,46,.9)}
 .adm .sb-brand .bt{white-space:nowrap;font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:-.01em;line-height:1;color:#fff}
 .adm .sb-brand .bs{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--lime);margin-top:4px;text-transform:uppercase}
 .adm .sb-scroll{flex:1;overflow-y:auto;padding-top:18px;display:flex;flex-direction:column;gap:4px}
@@ -804,7 +804,9 @@ html.js .hero .reveal.d4{animation-delay:.48s}
 .adm .sb-user .av{width:38px;height:38px;border-radius:50%;flex:none;background:linear-gradient(150deg,var(--lime),var(--lime-3));display:grid;place-items:center;color:var(--ink);font-weight:800;font-family:var(--display);font-size:15px}
 .adm .sb-user .nm{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2}
 .adm .sb-user .rl{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--sidebar-muted);margin-top:2px}
-.adm .sb-user .cog{margin-left:auto;color:var(--sidebar-muted);font-size:16px}
+.adm .sb-user .cog{margin-left:auto;color:var(--sidebar-muted);display:grid;place-items:center}
+.adm .li-body .meta span{display:inline-flex;align-items:center;gap:5px}
+.adm .li-body .meta span svg{color:var(--muted-d)}
 
 /* ---------- main column ---------- */
 .adm .main{display:flex;flex-direction:column;min-width:0}
@@ -895,8 +897,10 @@ html.js .hero .reveal.d4{animation-delay:.48s}
 .adm .st.bad{background:var(--bad-soft);color:var(--bad)}
 .adm .st.info{background:var(--info-soft);color:var(--info)}
 .adm .st.done{background:var(--paper-2);color:var(--muted)}
-.adm select.st{cursor:pointer;appearance:none;padding-left:11px}
+.adm select.st{cursor:pointer;appearance:none;padding:5px 26px 5px 12px;box-shadow:inset 0 0 0 1px color-mix(in srgb,currentColor 38%,transparent);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 9px center;transition:box-shadow .15s,filter .15s}
 .adm select.st::before{display:none}
+.adm select.st:hover{box-shadow:inset 0 0 0 1px currentColor;filter:brightness(.97)}
+.adm select.st:focus-visible{outline:none;box-shadow:inset 0 0 0 1px currentColor,0 0 0 3px color-mix(in srgb,currentColor 22%,transparent)}
 
 /* occupancy bar */
 .adm .occ{display:flex;flex-direction:column;gap:6px;min-width:118px}
@@ -961,7 +965,7 @@ html.js .hero .reveal.d4{animation-delay:.48s}
   .adm{--sb-w:74px}
   .adm .sb-brand .bt,.adm .sb-brand .bs,.adm .sb-group,.adm .sb-link .lbl,.adm .sb-link .badge,.adm .sb-link .soon,.adm .sb-user .nm,.adm .sb-user .rl,.adm .sb-user .cog{display:none}
   .adm .sb-brand{justify-content:center;padding-left:0;padding-right:0}
-  .adm .sb-brand img{max-height:18px;max-width:46px}
+  .adm .sb-brand .sb-mark{width:36px;height:36px}
   .adm .sb-link{justify-content:center;padding:10px}
   .adm .sb-link.active::before{left:-12px}
   .adm .sb-user{justify-content:center}

@@ -7,7 +7,6 @@ export {
   SESSION_TTL_SECONDS,
   createSession,
   verifySession,
-  checkPassword,
 } from "@/lib/session";
 
 /** Server-side auth check (Server Components / Route Handlers). */
