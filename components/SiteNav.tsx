@@ -39,11 +39,11 @@ export default function SiteNav() {
         <div className="wrap nav-inner">
           <Link href="/" aria-label="Toubkal Pathfinders home">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="Toubkal Pathfinders"
               className="logo"
-              width={932}
-              height={356}
+              width={1200}
+              height={470}
               priority
               sizes="120px"
             />

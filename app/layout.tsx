@@ -72,9 +72,9 @@ export const metadata: Metadata = {
     description: SITE.description,
     images: [
       {
-        url: "/logo.png",
-        width: 932,
-        height: 356,
+        url: "/logo.webp",
+        width: 1200,
+        height: 470,
         alt: SITE.name,
       },
     ],
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
-    images: ["/logo.png"],
+    images: ["/logo.webp"],
   },
 };
 

@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? trek.image.startsWith("http")
       ? trek.image
       : `${SITE.url}${trek.image}`
-    : `${SITE.url}/logo.png`;
+    : `${SITE.url}/logo.webp`;
 
   return {
     title: trek.name,

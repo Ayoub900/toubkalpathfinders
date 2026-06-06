@@ -11,7 +11,7 @@ export default function BlogJsonLd({ post }: { post: Post }) {
     ? post.coverImage.startsWith("http")
       ? post.coverImage
       : `${SITE.url}${post.coverImage}`
-    : `${SITE.url}/logo.png`;
+    : `${SITE.url}/logo.webp`;
 
   const blogPosting = {
     "@type": "BlogPosting",

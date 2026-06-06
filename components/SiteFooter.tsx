@@ -9,12 +9,12 @@ export default function SiteFooter() {
         <div className="foot-top">
           <div>
             <Image
-              src="/logo.png"
+              src="/logo-white.webp"
               alt="Toubkal Pathfinders"
               className="logo"
-              width={932}
-              height={356}
-              sizes="150px"
+              width={1200}
+              height={470}
+              sizes="180px"
             />
             <p>
               Locally owned mountain specialists in the High Atlas of Morocco.

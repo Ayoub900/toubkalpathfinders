@@ -4,7 +4,6 @@ export default function FinalCta() {
   return (
     <section className="section dark cta" id="contact" data-screen-label="Final CTA">
       <div className="cta-ridge" aria-hidden="true"></div>
-      <span className="ph-tag">▲ summit sunrise on Mount Toubkal</span>
       <div className="wrap inner">
         <span className="kicker reveal" style={{ justifyContent: "center" }}>
           READY WHEN YOU ARE

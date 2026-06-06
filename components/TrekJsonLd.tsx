@@ -3,7 +3,7 @@ import { CATEGORY_LABEL, parseItinerary, type Trek } from "@/lib/treks";
 
 /** Resolve a stored image path to an absolute URL for structured data. */
 function absolute(src: string | null | undefined): string {
-  if (!src) return `${SITE.url}/logo.png`;
+  if (!src) return `${SITE.url}/logo.webp`;
   return src.startsWith("http") ? src : `${SITE.url}${src}`;
 }
 
